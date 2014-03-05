@@ -47,7 +47,7 @@ module.exports = function(grunt) {
       custom_options: {
         options: {
           killIfRunning : true,
-          file : '.tmp/custom_options.npd'
+          file : '.tmp/custom_options.pid'
         }
       }
     },
