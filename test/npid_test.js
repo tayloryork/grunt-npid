@@ -29,20 +29,23 @@ exports.npid = {
   },
   default_options: function(test) {
     test.expect(1);
-    debugger;
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+    
+    var actual = grunt.file.read('.tmp/npid.pid');
+    var expected = process.pid;
+    test.equal(actual, expected, 'pid file should be ' + expected);
 
     test.done();
   },
   custom_options: function(test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
+    // tests custom pid filename
+    var actual = grunt.file.read('.tmp/custom_options.pid');
+    var expected = process.pid;
+    test.equal(actual, expected, 'pid file should be ' + expected);
 
+    // test kill if running true
+    // test kill if running false
     test.done();
   },
 };

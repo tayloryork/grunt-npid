@@ -25,18 +25,29 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp'],
+      tests: ['.tmp/*'],
+    },
+    
+    // create tmp dirs
+    mkdir: {
+      all: {
+        options: {
+          create: ['.tmp']
+        },
+      },
     },
 
     // Configuration to be run (and then tested).
     npid: {
       default_options: {
+        // killIfRunning: false
+        // file: .tmp/npid.pid
         options: {},
       },
       custom_options: {
         options: {
           killIfRunning : true,
-          file : '.tmp/custom_options'
+          file : '.tmp/custom_options.npd'
         }
       }
     },
@@ -55,10 +66,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
-
+  grunt.loadNpmTasks('grunt-mkdir');
+  
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'npid', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'mkdir', 'npid', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
