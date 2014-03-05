@@ -53,7 +53,8 @@ If this value is ture, and the pid file already exists when the task is ran, the
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example, running the npid task will create a pid file, and delete it when the process exits.
+If a long running process, such as `grunt npid server` is running, running `grunt npid server` again will leave the current server running and try to start a new one. The pid file will be updated with the new process id.
 
 ```js
 grunt.initConfig({
@@ -81,7 +82,7 @@ grunt.initConfig({
     options: {
       killIfRunning : true,
     },
-    server : {
+    myTask : {
       file : '.tmp/grunt-server.pid',
     },
   },
