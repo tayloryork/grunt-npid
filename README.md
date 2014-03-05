@@ -37,17 +37,18 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.file
 Type: `String`
-Default value: `',  '`
+Default value: `.tmp/npid.pid'`
 
-A string value that is used to do something with whatever.
+A file path that is created when the the task npid is ran and deleted when the grunt process exists.
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+#### options.killIfRunning
+Type: `Boolean`
+Default value: `false`
 
-A string value that is used to do something else with whatever else.
+If this value is false, and the pid file already exists when the task is ran, the pid file will be updated with the new pid. The previous process ID, if running or stopped, is ignored.
+If this value is ture, and the pid file already exists when the task is ran, the process ID in the pid file is read, and then killed with process.kill(pid);.  Then the pid file is updated with the current grunt process.
 
 ### Usage Examples
 
@@ -58,32 +59,37 @@ In this example, the default options are used to do something with whatever. So 
 grunt.initConfig({
   npid: {
     options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    // Defaults to 
+    // file: './tmp/npid.pid'
+    // killIfRunning : false
   },
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+A common use case for grunt-npid will be to start a grunt server, and kill it later.
+Another use case is to start a grunt server, and upon start, kill any previously running grunt servers, and then start a new one.
+
+For example, you start a grunt server with `grunt npid server` which will run the grunt tasks `npid` (which will create the pid file) and then `server` (which starts a web server and runs forever/untill killed).
+Then some time later you start a second grunt process `grunt npid server`. This will kill the first server, and start a new one.
+
+Another example, you start a grunt server with `grunt npid server`, which will run forever.  Running simply `grunt npid` will kill the server.
 
 ```js
 grunt.initConfig({
   npid: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      killIfRunning : true,
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+    server : {
+      file : '.tmp/grunt-server.pid',
     },
   },
 });
 ```
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+Email me/tweet me!
 
 ## Release History
 _(Nothing yet)_
