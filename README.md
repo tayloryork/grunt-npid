@@ -1,6 +1,8 @@
-# grunt-npid
+# grunt-npid (OR grunt-pid-file, tbd)
 
 > Grunt tasks for npid, a pid file manager for Node.js
+or
+> Grunt tasks for pid file managment.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
