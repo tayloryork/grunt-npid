@@ -59,7 +59,7 @@ exports.npid = {
     test.done();
   },
   custom_options_kill_true: function(test) {
-    test.expect(0);
+    test.expect(1);
     console.log('\n');
     grunt.log.write('loading ./tasks/npid.js');
     
@@ -71,46 +71,71 @@ exports.npid = {
     //   spawn a new process (grunt npid:custom_options + a long running task)
     //   spawn a new process (grunt npid:custom_options, which should kill the first process)
     // verify that process1 was killed.
-    var spawned = false;
-    
+    var util = require('util');  
     var doneFn = function(error, result, code){
-      var util = require('util');
       console.log('error is: ' + util.inspect(error));
       console.log('result is: ' + util.inspect(result));
       console.log('code is: ' + util.inspect(code));
-      spawned = true;
     };
     
-    var prevPid = grunt.file.read('.tmp/custom_options.pid'); 
-    console.log('Previous PID: ' + prevPid);
+    var readPidFile = function() {
+      var contents = '';
+      try {
+        contents = grunt.file.read('.tmp/custom_options.pid');
+      } catch (err) {
+        // nothing
+      }
+      return contents;
+    }
+    var prevPid = readPidFile();
+    console.log('Deleting previous PID: ' + prevPid);
+    grunt.file.delete('.tmp/custom_options.pid');
+    grunt.file.delete('.tmp/npid.pid');
+    sleep(1);
     
-    console.log('Creating Spawn 1 npid\n');    
-    grunt.task.loadTasks("./tasks/npid.js");
-    grunt.file.delete('./tmp/custom_options.pid');
+    console.log('Creating Spawn 1 npid');    
+    //grunt.task.loadTasks("./tasks/npid.js");
     var spawn1 = grunt.util.spawn({
-      cmd: 'npid:custom_options',
+      args: ['npid:custom_options', 'asyncfoo', '--no-color'],
       grunt: true,
       }, doneFn);
-    
+    spawn1.disconnect();
     // sleep for 100ms
-    sleep(1000);
-    console.log('After spawn 1, pid file is: ' + grunt.file.read('.tmp/custom_options.pid'));
+    sleep(5000);
+    
     console.log('And spawn 1.pid is: ' + spawn1.pid);
+    console.log('Spawn 1 connected: ' + spawn1.connected);
+    console.log('After spawn 1, pid file is: ' + readPidFile());
+    test.equals(readPidFile().trim(), spawn1.pid.toString());
     
     // now spawn procces 2
     var spawn2 = grunt.util.spawn({
-      cmd: 'npid:custom_options',
+      args: ['npid:custom_options', '--no-color'],
       grunt: true,
       }, doneFn);
+    spawn2.disconnect();
     
     // sleep for 100ms
-    sleep(3000);
-    console.log('After spawn 2, pid file is: ' + grunt.file.read('.tmp/custom_options.pid'));
+    sleep(1000);
     console.log('And spawn 2.pid is: ' + spawn2.pid);
+    console.log('Spawn 1 killed: ' + spawn1.killed);
+    console.log('Spawn 1 connected: ' + spawn1.connected);
+    console.log('Spawn 2 killed: ' + spawn2.killed);
+    console.log('Spawn 2 connected: ' + spawn2.connected);
     
-    console.log('done running npid:custom_options\n');
-    console.log('Spawn 1 killed: ' + spawn1.killed + '\n');
-    console.log('Spawn 2 killed: ' + spawn2.killed + '\n');
+    test.equals(spawn1.killed, true, "Spawn 1 should have been killed");
+    // Okay, test is failing because the spawn 1 does not say it was killed.
+    // I know, becasue i have looked at the task manager, that it was in fact killed.
+    //
+    //console.log(require('util').inspect(spawn1));
+    
+    var counter = 0;
+    var intvl = setInterval(function(){
+      counter ++;
+      sleep(1);
+      if(counter > 3)
+        clearInterval(intvl);
+    }, 1000);
     
     test.done();
   },

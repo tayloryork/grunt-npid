@@ -15,6 +15,8 @@ module.exports = function(grunt) {
     var killIfRunning = this.options().killIfRunning || false;
     var runningProcessPid = null;
     
+    grunt.log.debug("Target: " + target + " File: " + this.options().file + " killIfRunning: " + this.options().killIfRunning);
+    
     if(killIfRunning) {
       try {
         runningProcessPid = grunt.file.read(file);
@@ -34,7 +36,13 @@ module.exports = function(grunt) {
     
     try {
       var npid = require('npid');
-      grunt.log.write("Writing PID to %s", file);
+      var path = require('path');
+      grunt.log.writeln("Writing PID to %s", file);
+      var dirname = path.dirname(file);
+      grunt.log.writeln("Directory of PID file: ", dirname);
+      if(!grunt.file.exists(dirname)){
+        grunt.file.mkdir(dirname);
+      }
       npid.create(file, true);
     } catch (err) {
       grunt.log.error(err);

@@ -27,15 +27,6 @@ module.exports = function(grunt) {
     clean: {
       tests: ['.tmp/*'],
     },
-    
-    // create tmp dirs
-    mkdir: {
-      all: {
-        options: {
-          create: ['.tmp']
-        },
-      },
-    },
 
     // Configuration to be run (and then tested).
     npid: {
@@ -66,11 +57,22 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
-  grunt.loadNpmTasks('grunt-mkdir');
+  
+  grunt.registerTask('asyncfoo', 'My "asyncfoo" task.', function() {
+    // Force task into async mode and grab a handle to the "done" function.
+    var done = this.async();
+    // Run some sync stuff.
+    grunt.log.writeln('Processing task...');
+    // And some async stuff.
+    setTimeout(function() {
+      grunt.log.writeln('All done!');
+      done();
+    }, 10000);
+  });
   
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'mkdir', 'npid', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'npid', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
