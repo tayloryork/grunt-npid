@@ -134,19 +134,18 @@ exports.pidFile = {
     
     // now spawn procces 2
     var spawn2 = grunt.util.spawn({
-      args: ['pidFile:default_options', '--no-color'],
+      args: ['pidFile:custom_options', '--no-color'],
       grunt: true,
       }, doneFn);
     
     spawn2.unref();
     // sleep for x ms
-    console.log('Spawn 2 is running. waiting for it to kill spawn 1...');
-    sleep(1000);
-    process.kill(spawn1.pid, 'SIGTERM'); 
+    console.log('\nSpawn 2 is running. waiting for it to kill spawn 1...');
+    sleep(5000);
+    //process.kill(spawn1.pid, 'SIGTERM'); 
     sleep(100);
-    console.log('doneFnCalled: ' + doneFnCalled);
-    console.log('spawn1 pid file: ' + readPidFile());
-    
+
+    console.log('Spawn 1 pid file: ' + readPidFile());
     var spawn1Killed = (readPidFile().trim() == '');
     console.log('And spawn 2.pid: ' + spawn2.pid);
     console.log('Spawn 1 killed?: ' + spawn1Killed);
