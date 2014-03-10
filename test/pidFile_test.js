@@ -22,6 +22,11 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
+function sleep(milliSeconds){
+  var startTime = new Date().getTime();                    // get the current time
+  while (new Date().getTime() < startTime + milliSeconds){} // hog cpu until time's up
+}
+
 exports.pidFile = {
   setUp: function(done) {
     // setup here if necessary
@@ -86,7 +91,7 @@ exports.pidFile = {
         // nothing
       }
       return contents;
-    }
+    };
     var prevPid = readPidFile();
     console.log('Deleting previous PID: ' + prevPid);
     grunt.file.delete('.tmp/custom_options.pid');
@@ -132,15 +137,11 @@ exports.pidFile = {
     var intvl = setInterval(function(){
       counter ++;
       sleep(1);
-      if(counter > 3)
+      if(counter > 3) {
         clearInterval(intvl);
+      }
     }, 1000);
     
     test.done();
   },
 };
-
-function sleep(milliSeconds){
-  var startTime = new Date().getTime();                    // get the current time
-  while (new Date().getTime() < startTime + milliSeconds); // hog cpu until time's up
-}
