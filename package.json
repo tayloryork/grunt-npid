@@ -1,6 +1,6 @@
 {
   "name": "grunt-pid-file",
-  "description": "A pid file manager for Grunt",
+  "description": "Grunt tasks for pid file management",
   "version": "0.1.0",
   "homepage": "https://github.com/tyork/grunt-pid-file",
   "author": {
