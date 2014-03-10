@@ -27,6 +27,17 @@ function sleep(milliSeconds){
   while (new Date().getTime() < startTime + milliSeconds){} // hog cpu until time's up
 }
 
+function isAlive(pid) {
+  var result = false;
+  try {
+    result = process.kill(pid,0)
+    return result
+  }
+  catch (e) {
+    return e.code === 'EPERM';
+  }
+}
+
 exports.pidFile = {
   setUp: function(done) {
     // setup here if necessary
@@ -108,7 +119,7 @@ exports.pidFile = {
     sleep(1000);
     
     console.log('Spawn 1 pid: ' + spawn1.pid);
-    console.log('Spawn 1 alive?: ' + spawn1.kill(0));
+    console.log('Spawn 1 alive?: ' + isAlive(spawn1.pid));
     console.log('After spawn 1, pid file is: ' + readPidFile());
     
     test.equals(readPidFile().trim(), spawn1.pid.toString());
@@ -121,8 +132,8 @@ exports.pidFile = {
     
     // sleep for 100ms
     sleep(1000);
-    var spawn1Alive = spawn1.kill(0);
-    var spawn2Alive = spawn2.kill(0);
+    var spawn1Alive = isAlive(spawn1.pid);
+    var spawn2Alive = isAlive(spawn2.pid);
     console.log('And spawn 2.pid: ' + spawn2.pid);
     console.log('Spawn 1 alive?: ' + spawn1Alive);
     console.log('Spawn 2 alive?: ' + spawn2Alive);
