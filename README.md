@@ -2,6 +2,9 @@
 
 > Grunt tasks for pid file management
 
+# Travis-CI
+[![Build Status](https://travis-ci.org/tayloryork/grunt-pid-file.png?branch=master)](https://travis-ci.org/tayloryork/grunt-pid-file)
+
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
 
