@@ -1,6 +1,6 @@
 /*
- * grunt-npid
- * https://github.com/tyork/grunt-npid
+ * grunt-pid-file
+ * https://github.com/tyork/grunt-pid-file
  *
  * Copyright (c) 2014 tayloryork
  * Licensed under the MIT license.
@@ -29,10 +29,10 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    npid: {
+    pidFile: {
       default_options: {
         // killIfRunning: false
-        // file: .tmp/npid.pid
+        // file: .tmp/pid-file.pid
         options: {},
       },
       custom_options: {
@@ -72,7 +72,7 @@ module.exports = function(grunt) {
   
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'npid', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'pidFile', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
