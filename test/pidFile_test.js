@@ -87,8 +87,10 @@ exports.pidFile = {
     //   spawn a new process (grunt pidFile:custom_options + a long running task)
     //   spawn a new process (grunt pidFile:custom_options, which should kill the first process)
     // verify that process1 was killed.
-    var util = require('util');  
+    var util = require('util'); 
+    var doneFnCalled = false; 
     var doneFn = function(error, result, code){
+      doneFnCalled = true;
       console.log('error is: ' + util.inspect(error));
       console.log('result is: ' + util.inspect(result));
       console.log('code is: ' + util.inspect(code));
@@ -114,44 +116,47 @@ exports.pidFile = {
     var spawn1 = grunt.util.spawn({
       args: ['pidFile:custom_options', 'asyncfoo', '--no-color'],
       grunt: true,
+      opts: {
+          detached: true,
+          stdio: 'ignore',
+        },
       }, doneFn);
     // sleep for 100ms
+    spawn1.unref();
     sleep(1000);
-    
+ 
     console.log('Spawn 1 pid: ' + spawn1.pid);
     console.log('Spawn 1 alive?: ' + isAlive(spawn1.pid));
     console.log('After spawn 1, pid file is: ' + readPidFile());
-    
+    //console.log('util.inspect(spawn1): ' + util.inspect(spawn1));
+
     test.equals(readPidFile().trim(), spawn1.pid.toString());
     
     // now spawn procces 2
     var spawn2 = grunt.util.spawn({
-      args: ['pidFile:custom_options', '--no-color'],
+      args: ['pidFile:default_options', '--no-color'],
       grunt: true,
       }, doneFn);
     
-    // sleep for 100ms
+    spawn2.unref();
+    // sleep for x ms
+    console.log('Spawn 2 is running. waiting for it to kill spawn 1...');
     sleep(1000);
-    var spawn1Alive = isAlive(spawn1.pid);
-    var spawn2Alive = isAlive(spawn2.pid);
-    console.log('And spawn 2.pid: ' + spawn2.pid);
-    console.log('Spawn 1 alive?: ' + spawn1Alive);
-    console.log('Spawn 2 alive?: ' + spawn2Alive);
+    process.kill(spawn1.pid, 'SIGTERM'); 
+    sleep(100);
+    console.log('doneFnCalled: ' + doneFnCalled);
+    console.log('spawn1 pid file: ' + readPidFile());
     
-    test.equals(spawn1Alive, false, "Spawn 1 should have been killed");
+    var spawn1Killed = (readPidFile().trim() == '');
+    console.log('And spawn 2.pid: ' + spawn2.pid);
+    console.log('Spawn 1 killed?: ' + spawn1Killed);
+
+    test.equals(spawn1Killed, true, "Spawn 1 should have been killed");
     // Okay, test is failing because the spawn 1 does not say it was killed.
     // I know, becasue i have looked at the task manager, that it was in fact killed.
     //
     //console.log(require('util').inspect(spawn1));
     
-    var counter = 0;
-    var intvl = setInterval(function(){
-      counter ++;
-      sleep(1);
-      if(counter > 3) {
-        clearInterval(intvl);
-      }
-    }, 1000);
     
     test.done();
   },

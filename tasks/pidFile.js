@@ -26,7 +26,7 @@ module.exports = function(grunt) {
       try {
         if(runningProcessPid) {
           grunt.log.write('Killing process ' + runningProcessPid);
-          process.kill(runningProcessPid);
+          process.kill(runningProcessPid, 'SIGHUP');//, 'SIGKILL');
         }
       } catch (err) {
         grunt.log.error(err);

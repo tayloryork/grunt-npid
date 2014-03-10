@@ -62,7 +62,10 @@ module.exports = function(grunt) {
     // Force task into async mode and grab a handle to the "done" function.
     var done = this.async();
     // Run some sync stuff.
-    grunt.log.writeln('Processing task...');
+    grunt.log.writeln('Long Running task...');
+    process.on('SIGWINCH ', function() {
+     console.log('asyncFoog got SIGWINCH!'); 
+    });
     // And some async stuff.
     setTimeout(function() {
       grunt.log.writeln('All done!');
