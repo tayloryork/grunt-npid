@@ -10,8 +10,8 @@
 
 module.exports = function(grunt) {
 
-  grunt.registerMultiTask('npid', 'Grunt tasks for npid, a pid file manager for Node.js', function (target) {
-    var file = this.options().file  || ".tmp/npid.pid";
+  grunt.registerMultiTask('pidFile', 'Grunt tasks for pid file management', function (target) {
+    var file = this.options().file  || ".tmp/pid-file.pid";
     var killIfRunning = this.options().killIfRunning || false;
     var runningProcessPid = null;
     
