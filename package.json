@@ -2,7 +2,7 @@
   "name": "grunt-pid-file",
   "description": "Grunt tasks for pid file management",
   "version": "0.1.1",
-  "homepage": "https://github.com/tyork/grunt-pid-file",
+  "homepage": "https://github.com/tayloryork/grunt-pid-file",
   "author": {
     "name": "tayloryork",
     "email": "tayloryork@gmail.com",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/tyork/grunt-pid-file.git"
+    "url": "git://github.com/tayloryork/grunt-pid-file.git"
   },
   "bugs": {
-    "url": "https://github.com/tyork/grunt-pid-file/issues"
+    "url": "https://github.com/tayloryork/grunt-pid-file/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/tyork/grunt-pid-file/blob/master/LICENSE-MIT"
+      "url": "https://github.com/tayloryork/grunt-pid-file/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
