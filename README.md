@@ -11,23 +11,23 @@ This plugin requires Grunt `~0.4.2`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-npid --save-dev
+npm install grunt-pid-file --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-npid');
+grunt.loadNpmTasks('grunt-pid-file');
 ```
 
-## The "npid" task
+## The "pid-file" task
 
 ### Overview
-In your project's Gruntfile, add a section named `npid` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `pidFile` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  npid: {
+  pidFile: {
     options: {
       // Task-specific options go here.
     },
@@ -42,9 +42,9 @@ grunt.initConfig({
 
 #### options.file
 Type: `String`
-Default value: `.tmp/npid.pid'`
+Default value: `.tmp/pid-file.pid'`
 
-A file path that is created when the the task npid is ran and deleted when the grunt process exists.
+A file path that is created when the the task pidFile is ran and deleted when the grunt process exists.
 
 #### options.killIfRunning
 Type: `Boolean`
@@ -56,32 +56,32 @@ If this value is ture, and the pid file already exists when the task is ran, the
 ### Usage Examples
 
 #### Default Options
-In this example, running the npid task will create a pid file, and delete it when the process exits.
-If a long running process, such as `grunt npid server` is running, running `grunt npid server` again will leave the current server running and try to start a new one. The pid file will be updated with the new process id.
+In this example, running the pidFile task will create a pid file, and delete it when the process exits.
+If a long running process, such as `grunt pidFile server` is running, running `grunt pidFile server` again will leave the current server running and try to start a new one. The pid file will be updated with the new process id.
 
 ```js
 grunt.initConfig({
-  npid: {
+  pidFile: {
     options: {},
     // Defaults to 
-    // file: './tmp/npid.pid'
+    // file: './tmp/pid-file.pid'
     // killIfRunning : false
   },
 });
 ```
 
 #### Custom Options
-A common use case for grunt-npid will be to start a grunt server, and kill it later.
+A common use case for grunt-pid-file will be to start a grunt server, and kill it later.
 Another use case is to start a grunt server, and upon start, kill any previously running grunt servers, and then start a new one.
 
-For example, you start a grunt server with `grunt npid server` which will run the grunt tasks `npid` (which will create the pid file) and then `server` (which starts a web server and runs forever/untill killed).
-Then some time later you start a second grunt process `grunt npid server`. This will kill the first server, and start a new one.
+For example, you start a grunt server with `grunt pidFile server` which will run the grunt tasks `pidFile` (which will create the pid file) and then `server` (which starts a web server and runs forever/untill killed).
+Then some time later you start a second grunt process `grunt pidFile server`. This will kill the first server, and start a new one.
 
-Another example, you start a grunt server with `grunt npid server`, which will run forever.  Running simply `grunt npid` will kill the server.
+Another example, you start a grunt server with `grunt pidFile server`, which will run forever.  Running simply `grunt pidFile` will kill the server.
 
 ```js
 grunt.initConfig({
-  npid: {
+  pidFile: {
     options: {
       killIfRunning : true,
     },
