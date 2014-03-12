@@ -1,5 +1,13 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 before_install:
-  - npm install -g grunt-cli
+- npm install -g grunt-cli
+deploy:
+  provider: npm
+  email: tayloryork@gmail.com
+  api_key:
+    secure: aS/Z0085JQBF4HpDpfvKQbUN1F8t9g2yIGYdSS4d3ncwGao7iRR8iUe+2R70yGsRyS09lVqIMtvG4TyfBuvAx30evy5PrK10JNCQZAMJN4vPs8HEpkahsFJNWcbDkD5ilWXoNxI3yyI4XqwV2LUwP9o1IrbTJ+OhMEfq9OIarpc=
+  on:
+    tags: true
+    repo: tayloryork/grunt-pid-file
